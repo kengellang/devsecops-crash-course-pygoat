@@ -1,0 +1,24 @@
+name: DevSecOps CI/CD
+
+on: [push, pull_request]
+
+jobs:
+  bandit-sast:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install bandit
+
+      - name: Run Bandit
+        run: |
+          bandit -r pygoat -f json -o bandit_report.json
